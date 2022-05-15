@@ -43,8 +43,8 @@ public class ReimbursementStatusServiceImpl implements ReimbursementStatusServic
 	}
 
 	@Override
-	public boolean deleteReimbursementStatus(ReimbursementStatus reimbursementStatus) {
-		logger.info("in service layer. Deleting reimbursement status: " + reimbursementStatusDao);
-		return reimbursementStatusDao.delete(reimbursementStatus);
+	public boolean deleteReimbursementStatus(int id) {
+		logger.info("in service layer. Deleting reimbursement status: " + id);
+		return reimbursementStatusDao.delete(id);
 	}
 }

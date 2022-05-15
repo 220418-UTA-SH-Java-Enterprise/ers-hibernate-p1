@@ -16,10 +16,10 @@ public class Reimbursement {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="reimb_amount")
+	@Column(name="reimb_amount", nullable = false)
 	private double amount;
 	
-	@Column(name="reimb_submitted")
+	@Column(name="reimb_submitted", nullable = false)
 	private LocalDate submittedDate;
 
 	@Column(name="reimb_resolved")

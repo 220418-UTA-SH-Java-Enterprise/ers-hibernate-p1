@@ -81,21 +81,28 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 	public boolean delete(int id) {
 		UserRole userRole = selectById(id);
 		
-		logger.info("Deleting user role. User role info: " + userRole);
-
-		Session session = HibernateUtil.getSession();
-
-		Transaction tx = session.beginTransaction();
-
-		session.clear();
-
-		session.delete(userRole);
-
-		tx.commit();
-
-		logger.info("Successfully deleted the user!");
-
-		return true;
+		if (userRole != null) {
+			
+			logger.info("Deleting user role. User role info: " + userRole);
+			
+			Session session = HibernateUtil.getSession();
+			
+			Transaction tx = session.beginTransaction();
+			
+			session.clear();
+			session.delete(userRole);
+			
+			tx.commit();
+			
+			logger.info("Successfully deleted the user!");
+			
+			return true;
+			
+		} else {
+			logger.info("Delete failed: Unable to find a user role with id: " + id);
+			return false;			
+		}
+		
 	}
 
 }

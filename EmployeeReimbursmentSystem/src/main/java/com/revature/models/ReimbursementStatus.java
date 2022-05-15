@@ -12,7 +12,7 @@ public class ReimbursementStatus {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)//this is equivalent to the SERIAL keyword in SQL
 	private int id;
 	
-	@Column(name ="reimb_status")
+	@Column(name ="reimb_status", nullable = false, unique=true)
 	private String status;
 
 	public ReimbursementStatus() {  

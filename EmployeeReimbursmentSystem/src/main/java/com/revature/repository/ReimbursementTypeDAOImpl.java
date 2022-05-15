@@ -31,7 +31,7 @@ public class ReimbursementTypeDAOImpl implements ReimbursementTypeDAO {
 
 	@Override
 	public ReimbursementType selectById(int id) {
-		logger.info("searcing reimbursement type by id: " + id);
+		logger.info("Searching reimbursement type by id: " + id);
 
 		Session session = HibernateUtil.getSession();
 		// String query = "SELECT * FROM ers_reimbursement WHERE id = " id;
@@ -70,28 +70,36 @@ public class ReimbursementTypeDAOImpl implements ReimbursementTypeDAO {
 		
 		tx.commit();
 		
-		logger.info("Reimbursement type updated sucessfully! ");
+		logger.info("Reimbursement type updated successfully! ");
 		
 		return true;
 	}
 
 	@Override
-	public boolean delete(ReimbursementType reimbursementType) {
-		logger.info("Deleting reimbursement type. Reimbursement type info: " + reimbursementType);
+	public boolean delete(int id) {
+		ReimbursementType reimbursementType = selectById(id);
 		
-		Session session = HibernateUtil.getSession();
+		if (reimbursementType != null) {
+			logger.info("Deleting reimbursement type. Reimbursement type info: " + reimbursementType);
+			
+			Session session = HibernateUtil.getSession();
+			
+			Transaction tx = session.beginTransaction();
+			
+			session.clear();
+			
+			session.delete(reimbursementType);
+			
+			tx.commit();
+			
+			logger.info("Successfully deleted the reimbursement type!");
+			
+			return true;
+		} else {
+			logger.info("Delete failed: Unable to find a reimbursement type with id: " + id);
+			return false;	
+		}
 		
-		Transaction tx = session.beginTransaction();
-		
-		session.clear();
-		
-		session.delete(reimbursementType);
-		
-		tx.commit();
-		
-		logger.info("Successfully deleted the reimbursement type!");
-		
-		return true;
 	}
 
 }

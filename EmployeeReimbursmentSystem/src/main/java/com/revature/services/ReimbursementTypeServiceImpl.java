@@ -43,8 +43,8 @@ public class ReimbursementTypeServiceImpl implements ReimbursementTypeService {
 	}
 
 	@Override
-	public boolean deleteReimbursementType(ReimbursementType reimbursementType) {
-		logger.info("in service layer. deleting reimbursement type: " + reimbursementTypeDao);
-		return reimbursementTypeDao.delete(reimbursementType);
+	public boolean deleteReimbursementType(int id) {
+		logger.info("in service layer. deleting reimbursement type: " + id);
+		return reimbursementTypeDao.delete(id);
 	}
 }

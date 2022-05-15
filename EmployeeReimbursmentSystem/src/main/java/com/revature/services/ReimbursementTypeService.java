@@ -14,5 +14,5 @@ public interface ReimbursementTypeService {
 	
 	public boolean editReimbursementType(ReimbursementType reimbursementType);
 	
-	public boolean deleteReimbursementType(ReimbursementType reimbursementType);
+	public boolean deleteReimbursementType(int id);
 }

@@ -14,7 +14,7 @@ public class ReimbursementType {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="reimb_type")
+	@Column(name="reimb_type", nullable = false, unique=true)
 	private String type;
 
 	public ReimbursementType() {

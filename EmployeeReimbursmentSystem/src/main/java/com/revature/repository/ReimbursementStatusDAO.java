@@ -9,5 +9,5 @@ public interface ReimbursementStatusDAO {
 	public ReimbursementStatus sellectById(int id);
 	public List<ReimbursementStatus> selectAll();
 	public boolean update(ReimbursementStatus reimbursementStatus);
-	public boolean delete(ReimbursementStatus reimbursementStatus);
+	public boolean delete(int id);
 }

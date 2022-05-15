@@ -14,6 +14,6 @@ public interface ReimbursementStatusService {
 	
 	public boolean editReimbursementStatus(ReimbursementStatus reimbursementStatus);
 	
-	public boolean deleteReimbursementStatus(ReimbursementStatus reimbursementStatus);
+	public boolean deleteReimbursementStatus(int id);
 
 }

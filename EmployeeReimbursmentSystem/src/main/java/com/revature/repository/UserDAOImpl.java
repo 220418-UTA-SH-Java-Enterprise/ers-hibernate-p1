@@ -100,21 +100,28 @@ public class UserDAOImpl implements UserDAO {
 		
 		User user = selectById(id);
 		
-		logger.info("Deleting user. User info: " + user);
-
-		Session session = HibernateUtil.getSession();
-
-		Transaction tx = session.beginTransaction();
-
-		session.clear();
-
-		session.delete(user);
-
-		tx.commit();
-
-		logger.info("Successfully deleted the user!");
-
-		return true;
+		if (user != null) {
+			
+			logger.info("Deleting user. User info: " + user);
+			
+			Session session = HibernateUtil.getSession();
+			
+			Transaction tx = session.beginTransaction();
+			
+			session.clear();
+			
+			session.delete(user);
+			
+			tx.commit();
+			
+			logger.info("Successfully deleted the user!");
+			
+			return true;
+		} else {
+			logger.info("Delete failed: Unable to find a user with id: " + id);
+			return false;	
+		}
+		
 	}
 
 }

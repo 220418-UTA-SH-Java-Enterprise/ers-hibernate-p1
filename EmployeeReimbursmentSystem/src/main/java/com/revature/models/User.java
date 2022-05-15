@@ -14,19 +14,19 @@ public class User {
 	private int id;
 	
 	@NaturalId
-	@Column(name="ers_username")
+	@Column(name="ers_username", nullable = false, unique=true)
 	private String userName;
 	
-	@Column(name="ers_password")
+	@Column(name="ers_password", nullable = false)
 	private String password;
 	
-	@Column(name="user_first_name")
+	@Column(name="user_first_name", nullable = false)
 	private String firstName;
 	
-	@Column(name="user_last_name")
+	@Column(name="user_last_name", nullable = false)
 	private String lastName;
 	
-	@Column(name="user_email")
+	@Column(name="user_email", nullable = false, unique=true)
 	private String email;
 	
 	@ManyToOne
