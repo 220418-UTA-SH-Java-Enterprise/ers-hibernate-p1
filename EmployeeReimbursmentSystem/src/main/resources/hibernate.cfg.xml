@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!-- DTD stands for Document Type Definition -->
+<hibernate-configuration>
+	<session-factory>
+		<!-- Making sure the dialect points to Postgres -->
+		<property name="hibernate-dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		
+		<!-- This is pointing to the PostgreSQL driver dependency in our pom.xml file -->
+		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+		
+		<!-- setting our JDBC connection credentials -->
+		<!-- Make sure you put this file in .gitignore for your repo -->
+		<property name="hibernate.connection.url">jdbc:postgresql://database-ers.cqif7qrlhv0g.us-east-1.rds.amazonaws.com:5432/ersdb/</property>
+		<property name="hibernate.connection.username">postgres</property>
+		<property name="hibernate.connection.password">ers-2022</property>
+		
+		<!--  Connection Pool properties:
+				The connection pool is a method of speeding up DB calls.
+				Default size of connection pool is 20 connections.
+				Every time Hibernate starts up, 20 connections are established to our DB.
+				This way, when a session is created (aka an operation against our DB), it is
+				much faster than just plain JDBC.
+				
+		-->
+		<property name="hibernate.connection.pool_size">10</property>
+		<!-- the most important property -->
+		<property name="hibernate.hbm2ddl.auto">create</property>
+	</session-factory>
+</hibernate-configuration>
+
