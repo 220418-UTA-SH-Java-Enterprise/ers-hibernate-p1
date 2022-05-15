@@ -20,6 +20,12 @@ public class ERSController extends HttpServlet {
 		log.info("URI: " + URI);
 
 		switch (URI) {
+		
+		case "login":
+			log.info("User wants a list of users from API...");
+			RequestHelper.processLogin(req, resp);
+			break;
+		
 		case "users":
 			log.info("User wants a list of users from API...");
 			RequestHelper.processAllUsers(req, resp);
@@ -39,6 +45,26 @@ public class ERSController extends HttpServlet {
 			log.info("User wants to search a user from API based on the id number. URI: " + URI);
 			RequestHelper.processBySearchUserRoleParam(req, resp);
 			break;	
+			
+		case "types":
+			log.info("User wants a list of users from API...");
+			RequestHelper.processAllTypes(req, resp);
+			break;
+			
+		case "statuses":
+			log.info("User wants a list of users from API...");
+			RequestHelper.processAllStatuses(req, resp);
+			break;
+			
+		case "reimbursement":
+			log.info("User wants to search a user from API based on the id number. URI: " + URI);
+			RequestHelper.processBySearchReimbursementParam(req, resp);
+			break;
+			
+		case "reimbursements":
+			log.info("User wants a list of users from API...");
+			RequestHelper.processAllReimbursements(req, resp);
+			break;
 
 		default:
 			log.info("showing error message...");
@@ -62,6 +88,21 @@ public class ERSController extends HttpServlet {
 			log.info("User wants to register a new user from API...");
 			RequestHelper.processUserRoleRegistration(req, resp);
 			break;
+			
+		case "registerType":
+			log.info("User wants to register a new user from API...");
+			RequestHelper.processTypeRegistration(req, resp);
+			break;
+			
+		case "registerStatus":
+			log.info("User wants to register a new user from API...");
+			RequestHelper.processStatusRegistration(req, resp);
+			break;	
+			
+		case "submitReimbursement":
+			log.info("User wants to register a new user from API...");
+			RequestHelper.processSubmitReimbursement(req, resp);
+			break;	
 			
 		default:
 			log.info("showing error message...");

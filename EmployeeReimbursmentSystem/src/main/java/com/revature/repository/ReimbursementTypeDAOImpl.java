@@ -52,7 +52,7 @@ public class ReimbursementTypeDAOImpl implements ReimbursementTypeDAO {
 		
 		Session session = HibernateUtil.getSession();
 		
-		List<ReimbursementType> reimbursementType = session.createQuery("from Reimbursement", ReimbursementType.class).list();
+		List<ReimbursementType> reimbursementType = session.createQuery("from ReimbursementType", ReimbursementType.class).list();
 		logger.info("Reimbursement type list retrieved! Size: " + reimbursementType);
 		return reimbursementType;
 	}

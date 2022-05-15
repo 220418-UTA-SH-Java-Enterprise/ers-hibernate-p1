@@ -79,21 +79,29 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	}
 
 	@Override
-	public boolean delete(Reimbursement reimbursement) {
-		log.info("Deleting user role. Reimbursement info: " + reimbursement);
+	public boolean delete(int id) {
+		Reimbursement reimbursement = selectById(id);
+		
+		if (reimbursement != null) {
+			log.info("Deleting user role. Reimbursement info: " + reimbursement);
 
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+			Session session = HibernateUtil.getSession();
+			Transaction tx = session.beginTransaction();
 
-		session.clear();
+			session.clear();
 
-		session.delete(reimbursement);
+			session.delete(reimbursement);
 
-		tx.commit();
+			tx.commit();
 
-		log.info("Reimbursement deleted successfully!");
+			log.info("Reimbursement deleted successfully!");
 
-		return true;
+			return true;
+		} else {
+			log.info("Delete failed: Unable to find a Reimbursement with id: " + id);
+			return false;	
+		}
+		
 	}
 
 }

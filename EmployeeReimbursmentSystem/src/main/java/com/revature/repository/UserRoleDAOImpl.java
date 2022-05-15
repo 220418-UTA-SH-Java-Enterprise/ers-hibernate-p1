@@ -20,7 +20,7 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 		logger.info("Adding a new user role to database. User info: " + userRole);
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
-
+		session.clear();
 		int id = (int) session.save(userRole);
 
 		tx.commit();

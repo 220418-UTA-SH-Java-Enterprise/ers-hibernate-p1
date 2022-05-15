@@ -20,7 +20,7 @@ public class UserDAOImpl implements UserDAO {
 		logger.info("Adding a new user to database. User info: " + user);
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
-
+		session.clear();
 		int userId = (int) session.save(user);
 
 		tx.commit();

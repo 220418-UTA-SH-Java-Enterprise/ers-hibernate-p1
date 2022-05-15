@@ -27,7 +27,7 @@ public class ReimbursementStatusServiceImpl implements ReimbursementStatusServic
 	@Override
 	public ReimbursementStatus findReimbursementStatusById(int id) {
 		logger.info("in service layer. Searching reimbursement status by id: " + id);
-		return reimbursementStatusDao.sellectById(id);
+		return reimbursementStatusDao.selectById(id);
 	}
 
 	@Override

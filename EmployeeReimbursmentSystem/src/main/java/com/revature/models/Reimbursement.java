@@ -19,7 +19,7 @@ public class Reimbursement {
 	@Column(name="reimb_amount", nullable = false)
 	private double amount;
 	
-	@Column(name="reimb_submitted", nullable = false)
+	@Column(name="reimb_submitted", columnDefinition = "DATE DEFAULT CURRENT_DATE")
 	private LocalDate submittedDate;
 
 	@Column(name="reimb_resolved")
@@ -76,6 +76,17 @@ public class Reimbursement {
 		this.receipt = receipt;
 		Author = author;
 		Resolver = resolver;
+		this.status = status;
+		this.type = type;
+	}
+
+	public Reimbursement(Double amount, LocalDate submittedDate, String description, User author, ReimbursementStatus status,
+			ReimbursementType type) {
+		
+		this.amount = amount;
+		this.submittedDate = submittedDate;
+		this.description = description;
+		Author = author;
 		this.status = status;
 		this.type = type;
 	}

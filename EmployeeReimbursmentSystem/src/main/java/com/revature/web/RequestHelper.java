@@ -1,6 +1,7 @@
 package com.revature.web;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +13,19 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.models.User;
-import com.revature.models.UserRole;
-import com.revature.repository.UserDAOImpl;
-import com.revature.repository.UserRoleDAOImpl;
-import com.revature.services.UserRoleService;
-import com.revature.services.UserRoleServiceImpl;
-import com.revature.services.UserService;
-import com.revature.services.UserServiceImpl;
+import com.revature.models.*;
+import com.revature.repository.*;
+import com.revature.services.*;
 
 public class RequestHelper {
 
 	private static UserService userService = new UserServiceImpl(new UserDAOImpl());
 	private static UserRoleService userRoleService = new UserRoleServiceImpl(new UserRoleDAOImpl());
+	private static ReimbursementTypeService typeService = new ReimbursementTypeServiceImpl(new ReimbursementTypeDAOImpl());
+	private static ReimbursementStatusService statusService = new ReimbursementStatusServiceImpl(new ReimbursementStatusDAOImpl());
+	private static ReimbursementService reimbursementService = new ReimbursementServiceImpl(new ReimbursementDAOImpl(), new ReimbursementStatusDAOImpl(), new UserDAOImpl());
+	
+	
 	private static Logger log = Logger.getLogger(RequestHelper.class);
 	private static ObjectMapper om = new ObjectMapper();
 
@@ -358,5 +359,220 @@ public class RequestHelper {
 
 		String body = sb.toString();
 		return body;
+	}
+
+	public static void processLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("in RequestHelper -> searching a user by param");
+
+		String body = getStringRequest(req);
+
+		log.info("User searching with this info: " + body);
+
+		List<String> values = getSearchParamsList(body);
+
+		if (body.startsWith("username")) {
+			log.info("in RequestHelper -> get user by id");
+			resp.setContentType("application/json");
+			String userName = values.get(0);
+			String password = values.get(1);
+
+			User user = userService.login(userName, password);
+
+			String json = om.writeValueAsString(user);
+
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		}
+	}
+
+	public static void processAllTypes(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("in RequestHelper -> getting all reimbursement types");
+		resp.setContentType("application/json");
+		List<ReimbursementType> reimbursementTypes = typeService.findAllReimbursementTypes();
+
+		String json = om.writeValueAsString(reimbursementTypes);
+
+		PrintWriter out = resp.getWriter();
+		out.println(json);
+
+		log.info("Leaving RequestHelper");
+	}
+
+	public static void processAllStatuses(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("in RequestHelper -> getting all reimbursement statuses");
+		resp.setContentType("application/json");
+		List<ReimbursementStatus> reimbursementStatuses = statusService.findAllReimbursementStatus();
+
+		String json = om.writeValueAsString(reimbursementStatuses);
+
+		PrintWriter out = resp.getWriter();
+		out.println(json);
+
+		log.info("Leaving RequestHelper");
+	}
+
+	public static void processTypeRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processRegistration...");
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("User attempted to register with information:\n " + body);
+
+		String type = values.get(0);
+		ReimbursementType reimbursementType = new ReimbursementType(type);
+
+		int targetId = typeService.register(reimbursementType);
+
+		if (targetId != 0) {
+			PrintWriter pw = resp.getWriter();
+			reimbursementType.setId(targetId);
+			log.info("New user role: " + reimbursementType);
+			String json = om.writeValueAsString(reimbursementType);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("User has been created successfully.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(204); // this means that the connection was successful but no user created!
+		}
+		log.info("leaving request helper now...");
+	}
+
+	public static void processStatusRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processRegistration...");
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("User attempted to register with information:\n " + body);
+
+		String status = values.get(0);
+		ReimbursementStatus reimbursementStatus = new ReimbursementStatus(status);
+
+		int targetId = statusService.register(reimbursementStatus);
+
+		if (targetId != 0) {
+			PrintWriter pw = resp.getWriter();
+			reimbursementStatus.setId(targetId);
+			log.info("New user role: " + reimbursementStatus);
+			String json = om.writeValueAsString(reimbursementStatus);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("User has been created successfully.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(204); // this means that the connection was successful but no user created!
+		}
+		log.info("leaving request helper now...");
+	}
+
+	public static void processSubmitReimbursement(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processSubmitReimbursement...");
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("User attempted to submit a new reimbursement with information:\n " + body);
+		
+		Double amount = Double.parseDouble(values.get(0)) ;
+		LocalDate submittedDate = LocalDate.now();
+		String description = values.get(1);
+		
+		int authorId = Integer.parseInt(values.get(2));
+		User author = userService.findUserById(authorId);
+		 
+		int typeId = Integer.parseInt(values.get(3));
+		ReimbursementType type =  typeService.findReimbursementTypeById(typeId);
+		ReimbursementStatus status = statusService.findReimbursementStatusById(1);
+		
+		
+		
+		Reimbursement reimbursement = new Reimbursement(amount, submittedDate, description, author, status, type);
+		
+		log.info("Reimbursement:\n " + reimbursement);
+		
+		int targetId = reimbursementService.submit(reimbursement);
+
+		if (targetId != 0) {
+			PrintWriter pw = resp.getWriter();
+			reimbursement.setId(targetId);
+			log.info("New Reimbursement: " + reimbursement);
+			String json = om.writeValueAsString(reimbursement);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("User has been created successfully.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(204); // this means that the connection was successful but no user created!
+		}
+		log.info("leaving request helper now...");
+		
+	}
+
+	public static void processBySearchReimbursementParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("in RequestHelper -> searching a Reimbursement by param");
+
+		String body = getStringRequest(req);
+
+		log.info("User searching Reimbursement(s) with this info: " + body);
+
+		List<String> values = getSearchParamsList(body);
+
+		if (body.startsWith("status")) {
+			log.info("in RequestHelper -> get Reimbursement by status");
+			resp.setContentType("application/json");
+			int statusId = Integer.parseInt(values.get(0));
+
+			List<Reimbursement> reimbursements = reimbursementService.findByStatus(statusId);
+
+			String json = om.writeValueAsString(reimbursements);
+
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		} else if (body.startsWith("userId")) {
+			log.info("in RequestHelper -> get Reimbursement by status for an employee");
+			resp.setContentType("application/json");
+			
+			int userId = Integer.parseInt(values.get(0));
+			int statusId = Integer.parseInt(values.get(1));
+
+			List<Reimbursement> reimbursements = reimbursementService.findByStatusAndUser(statusId, userId);
+
+			String json = om.writeValueAsString(reimbursements);
+
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		}
+		
+	}
+
+	public static void processAllReimbursements(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("in RequestHelper -> getting all reimbursements");
+		resp.setContentType("application/json");
+		List<Reimbursement> reimbursements = reimbursementService.findAll();
+
+		String json = om.writeValueAsString(reimbursements);
+
+		PrintWriter out = resp.getWriter();
+		out.println(json);
+
+		log.info("Leaving RequestHelper");
+		
 	}
 }

@@ -29,7 +29,7 @@ public class ReimbursementStatusDAOImpl implements ReimbursementStatusDAO{
 	}
 
 	@Override
-	public ReimbursementStatus sellectById(int id) {
+	public ReimbursementStatus selectById(int id) {
 		logger.info("searching reimbursement status by id: " + id);
 		
 		Session session = HibernateUtil.getSession();
@@ -49,7 +49,7 @@ public class ReimbursementStatusDAOImpl implements ReimbursementStatusDAO{
 		
 		Session session  = HibernateUtil.getSession();
 		
-		List<ReimbursementStatus> reimbursementStatus = session.createQuery("from Reimbursement", ReimbursementStatus.class).list();
+		List<ReimbursementStatus> reimbursementStatus = session.createQuery("from ReimbursementStatus", ReimbursementStatus.class).list();
 		//TODO: size method is missing
 		logger.info("Reimbursement status list retireved! Size: " + reimbursementStatus);
 		return reimbursementStatus;
@@ -74,7 +74,7 @@ public class ReimbursementStatusDAOImpl implements ReimbursementStatusDAO{
 
 	@Override
 	public boolean delete(int id) {
-		ReimbursementStatus reimbursementStatus = sellectById(id);
+		ReimbursementStatus reimbursementStatus = selectById(id);
 		
 		if (reimbursementStatus != null) {
 			logger.info("Deleting reimbursement status. Reimbursement status info: " + reimbursementStatus);
