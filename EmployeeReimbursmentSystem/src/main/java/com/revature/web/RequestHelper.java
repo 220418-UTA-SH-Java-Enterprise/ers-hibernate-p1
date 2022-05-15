@@ -45,26 +45,11 @@ public class RequestHelper {
 	public static void processBySearchUserParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("in RequestHelper -> searching a user by param");
 
-		BufferedReader reader = req.getReader();
-		StringBuilder sb = new StringBuilder();
-
-		log.info("Leaving RequestHelper");
-		String line = reader.readLine();
-		while (line != null) {
-			sb.append(line);
-			line = reader.readLine();
-		}
-
-		String body = sb.toString();
+		String body = getStringRequest(req);
 
 		log.info("User searching with this info: " + body);
 
-		String[] searchParams = body.split("&");
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : searchParams) {
-			values.add(pair.substring(pair.indexOf("=") + 1));
-		}
+		List<String> values = getSearchParamsList(body);
 
 		if (body.startsWith("id")) {
 			log.info("in RequestHelper -> get user by id");
@@ -85,25 +70,10 @@ public class RequestHelper {
 	public static void processUserRegistration(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		log.info("inside of request helper...processRegistration...");
-		BufferedReader reader = request.getReader();
-		StringBuilder s = new StringBuilder();
-
-		// we are just transferring our Reader data to our StringBuilder, line by line
-		String line = reader.readLine();
-		while (line != null) {
-			s.append(line);
-			line = reader.readLine();
-		}
-
-		String body = s.toString();
-		String[] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
-
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : sepByAmp) { // each element in array looks like this
-			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value ->
-																// [bob, pass]
-		}
+		String body = getStringRequest(request);
+		
+		List<String> values = getSearchParamsList(body);
+		
 		log.info("User attempted to register with information:\n " + body);
 		// capture the actual username and password values
 		String username = values.get(0);
@@ -136,38 +106,12 @@ public class RequestHelper {
 
 	}
 
-	public static void processError(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		// if something goes wrong, redirect the user to a custom 404 error page
-		req.getRequestDispatcher("error.html").forward(req, resp);
-		/*
-		 * Remember that the forward() method does NOT produce a new request, it just
-		 * forwards it to a new resource, and we also maintain the URL
-		 */
-
-	}
-
 	public static void processUserUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
-		BufferedReader reader = req.getReader();
-		StringBuilder s = new StringBuilder();
-
-		// we are just transferring our Reader data to our StringBuilder, line by line
-		String line = reader.readLine();
-		while (line != null) {
-			s.append(line);
-			line = reader.readLine();
-		}
-
-		String body = s.toString();
-		String[] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
-
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : sepByAmp) { // each element in array looks like this
-			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value ->
-																// [bob, pass]
-		}
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
 		log.info("User attempted to update with information:\n " + body);
 		// capture the actual username and password values
 		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
@@ -202,25 +146,10 @@ public class RequestHelper {
 
 	public static void processUserDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
-		BufferedReader reader = req.getReader();
-		StringBuilder s = new StringBuilder();
-
-		// we are just transferring our Reader data to our StringBuilder, line by line
-		String line = reader.readLine();
-		while (line != null) {
-			s.append(line);
-			line = reader.readLine();
-		}
-
-		String body = s.toString();
-		String[] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
-
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : sepByAmp) { // each element in array looks like this
-			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value ->
-																// [bob, pass]
-		}
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
 		log.info("User attempted to delete with information:\n " + body);
 		// capture the actual username and password values
 		int id = Integer.parseInt(values.get(0));
@@ -269,26 +198,11 @@ public class RequestHelper {
 	public static void processBySearchUserRoleParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("in RequestHelper -> searching a user role by param");
 
-		BufferedReader reader = req.getReader();
-		StringBuilder sb = new StringBuilder();
-
-		log.info("Leaving RequestHelper");
-		String line = reader.readLine();
-		while (line != null) {
-			sb.append(line);
-			line = reader.readLine();
-		}
-
-		String body = sb.toString();
+		String body = getStringRequest(req);
 
 		log.info("User searching with this info: " + body);
 
-		String[] searchParams = body.split("&");
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : searchParams) {
-			values.add(pair.substring(pair.indexOf("=") + 1));
-		}
+		List<String> values = getSearchParamsList(body);
 
 		if (body.startsWith("id")) {
 			log.info("in RequestHelper -> get user role by id");
@@ -309,25 +223,10 @@ public class RequestHelper {
 	public static void processUserRoleRegistration(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		log.info("inside of request helper...processRegistration...");
-		BufferedReader reader = req.getReader();
-		StringBuilder s = new StringBuilder();
-
-		// we are just transferring our Reader data to our StringBuilder, line by line
-		String line = reader.readLine();
-		while (line != null) {
-			s.append(line);
-			line = reader.readLine();
-		}
-
-		String body = s.toString();
-		String[] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
-
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : sepByAmp) { // each element in array looks like this
-			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value ->
-																// [bob, pass]
-		}
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
 		log.info("User attempted to register with information:\n " + body);
 		// capture the actual username and password values
 		String role = values.get(0);
@@ -356,25 +255,10 @@ public class RequestHelper {
 
 	public static void processUserRoleUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
-		BufferedReader reader = req.getReader();
-		StringBuilder s = new StringBuilder();
-
-		// we are just transferring our Reader data to our StringBuilder, line by line
-		String line = reader.readLine();
-		while (line != null) {
-			s.append(line);
-			line = reader.readLine();
-		}
-
-		String body = s.toString();
-		String[] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
-
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : sepByAmp) { // each element in array looks like this
-			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value ->
-																// [bob, pass]
-		}
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
 		log.info("User attempted to update with information:\n " + body);
 		// capture the actual username and password values
 		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
@@ -403,27 +287,13 @@ public class RequestHelper {
 
 	public static void processUserRoleDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
-		BufferedReader reader = req.getReader();
-		StringBuilder s = new StringBuilder();
-
-		// we are just transferring our Reader data to our StringBuilder, line by line
-		String line = reader.readLine();
-		while (line != null) {
-			s.append(line);
-			line = reader.readLine();
-		}
-
-		String body = s.toString();
-		String[] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
-
-		List<String> values = new ArrayList<String>();
-
-		for (String pair : sepByAmp) { // each element in array looks like this
-			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value ->
-																// [bob, pass]
-		}
+		
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
 		log.info("User attempted to delete with information:\n " + body);
-		// capture the actual username and password values
+		
 		int id = Integer.parseInt(values.get(0));
 		UserRole tempUserRole = userRoleService.findUserRoleById(id);
 
@@ -454,4 +324,39 @@ public class RequestHelper {
 		
 	}
 
+	public static void processError(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// if something goes wrong, redirect the user to a custom 404 error page
+		req.getRequestDispatcher("error.html").forward(req, resp);
+		/*
+		 * Remember that the forward() method does NOT produce a new request, it just
+		 * forwards it to a new resource, and we also maintain the URL
+		 */
+
+	}
+
+	private static List<String> getSearchParamsList(String body) {
+		String[] searchParams = body.split("&");
+		List<String> values = new ArrayList<String>();
+
+		for (String pair : searchParams) {
+			values.add(pair.substring(pair.indexOf("=") + 1));
+		}
+		return values;
+	}
+
+	private static String getStringRequest(HttpServletRequest req) throws IOException {
+		BufferedReader reader = req.getReader();
+		StringBuilder sb = new StringBuilder();
+
+		log.info("Leaving RequestHelper");
+		String line = reader.readLine();
+		while (line != null) {
+			sb.append(line);
+			line = reader.readLine();
+		}
+
+		String body = sb.toString();
+		return body;
+	}
 }
