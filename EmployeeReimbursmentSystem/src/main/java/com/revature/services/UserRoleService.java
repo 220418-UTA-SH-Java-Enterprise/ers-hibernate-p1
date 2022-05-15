@@ -14,5 +14,5 @@ public interface UserRoleService {
 	
 	public boolean editUserRole(UserRole userRole);
 	
-	public boolean deleteUserRole(UserRole userRole);
+	public boolean deleteUserRole(int id);
 }

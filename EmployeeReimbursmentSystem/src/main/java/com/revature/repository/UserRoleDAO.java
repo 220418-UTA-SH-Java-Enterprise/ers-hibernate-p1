@@ -9,5 +9,5 @@ public interface UserRoleDAO {
 	public UserRole selectById(int id);	
 	public List<UserRole> selectAll();
 	public boolean update(UserRole userRole);
-	public boolean delete(UserRole userRole);
+	public boolean delete(int id);
 }

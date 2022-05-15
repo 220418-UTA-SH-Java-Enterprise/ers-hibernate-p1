@@ -16,7 +16,7 @@ public class ERSController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		final String URI = req.getRequestURI().replace("/ERSController/", "");
+		final String URI = req.getRequestURI().replace("/EmployeeReimbursmentSystem/", "");
 		log.info("URI: " + URI);
 
 		switch (URI) {
@@ -27,8 +27,18 @@ public class ERSController extends HttpServlet {
 
 		case "user":
 			log.info("User wants to search a user from API based on the id number. URI: " + URI);
-			RequestHelper.processBySearchParam(req, resp);
+			RequestHelper.processBySearchUserParam(req, resp);
 			break;
+			
+		case "userRoles":
+			log.info("User wants a list of users from API...");
+			RequestHelper.processAllUserRoles(req, resp);
+			break;
+
+		case "userRole":
+			log.info("User wants to search a user from API based on the id number. URI: " + URI);
+			RequestHelper.processBySearchUserRoleParam(req, resp);
+			break;	
 
 		default:
 			log.info("showing error message...");
@@ -39,15 +49,20 @@ public class ERSController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		final String URI = req.getRequestURI().replace("/ERSController/", "");
+		final String URI = req.getRequestURI().replace("/EmployeeReimbursmentSystem/", "");
 		log.info("URI: " + URI);
 
 		switch (URI) {
-		case "register":
+		case "registerUser":
 			log.info("User wants to register a new user from API...");
-			RequestHelper.processRegistration(req, resp);
+			RequestHelper.processUserRegistration(req, resp);
 			break;
 
+		case "registerUserRole":
+			log.info("User wants to register a new user from API...");
+			RequestHelper.processUserRoleRegistration(req, resp);
+			break;
+			
 		default:
 			log.info("showing error message...");
 			RequestHelper.processError(req, resp);
@@ -57,13 +72,17 @@ public class ERSController extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		final String URI = req.getRequestURI().replace("/ERSController/", "");
+		final String URI = req.getRequestURI().replace("/EmployeeReimbursmentSystem/", "");
 		log.info("URI: " + URI);
 
 		switch (URI) {
-		case "update":
+		case "updateUser":
 			log.info("updating user...");
 			RequestHelper.processUserUpdate(req, resp);
+			break;
+		case "updateUserRole":
+			log.info("updating user...");
+			RequestHelper.processUserRoleUpdate(req, resp);
 			break;
 		default:
 			log.info("showing error message...");
@@ -76,14 +95,20 @@ public class ERSController extends HttpServlet {
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// save the URI and rewrite it to determine what functionality the user is
 		// requesting based on that endpoint
-		final String URI = req.getRequestURI().replace("/ERSController/", "");
+		final String URI = req.getRequestURI().replace("/EmployeeReimbursmentSystem/", "");
 		log.info("URI: " + URI);
 
 		switch (URI) {
-		case "delete":
+		case "deleteUser":
 			log.info("removing user...");
 			RequestHelper.processUserDelete(req, resp);
 			break;
+			
+		case "deleteUserRole":
+			log.info("removing user...");
+			RequestHelper.processUserRoleDelete(req, resp);
+			break;
+			
 		default:
 			log.info("showing error message...");
 			RequestHelper.processError(req, resp);

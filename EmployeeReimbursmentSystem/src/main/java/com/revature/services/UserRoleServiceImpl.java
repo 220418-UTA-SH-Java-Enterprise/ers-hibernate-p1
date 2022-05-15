@@ -44,9 +44,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 	}
 
 	@Override
-	public boolean deleteUserRole(UserRole userRole) {
-		log.info("in service layer. deleting user role: " + userRole);
-		return userRoleDao.delete(userRole);
+	public boolean deleteUserRole(int id) {
+		log.info("in service layer. deleting user role: " + id);
+		return userRoleDao.delete(id);
 	}
 
 }

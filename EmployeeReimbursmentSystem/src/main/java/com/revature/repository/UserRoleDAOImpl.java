@@ -21,13 +21,13 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 		Session session = HibernateUtil.getSession();
 		Transaction tx = session.beginTransaction();
 
-		int userId = (int) session.save(userRole);
+		int id = (int) session.save(userRole);
 
 		tx.commit();
 
-		logger.info("insert successful! New user id is " + userId);
+		logger.info("insert successful! New user id is " + id);
 
-		return userId; // return the auto-generated userId
+		return id; // return the auto-generated userId
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 
 		Session session = HibernateUtil.getSession();
 
-		List<UserRole> userRoles = session.createQuery("from User", UserRole.class).list();
+		List<UserRole> userRoles = session.createQuery("from UserRole", UserRole.class).list();
 		logger.info("User list retrieved! Size: " + userRoles.size());
 
 		return userRoles;
@@ -78,7 +78,9 @@ public class UserRoleDAOImpl implements UserRoleDAO {
 	}
 
 	@Override
-	public boolean delete(UserRole userRole) {
+	public boolean delete(int id) {
+		UserRole userRole = selectById(id);
+		
 		logger.info("Deleting user role. User role info: " + userRole);
 
 		Session session = HibernateUtil.getSession();

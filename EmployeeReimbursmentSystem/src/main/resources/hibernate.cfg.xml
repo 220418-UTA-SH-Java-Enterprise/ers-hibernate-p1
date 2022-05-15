@@ -1,32 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE hibernate-configuration SYSTEM
-"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-<!-- DTD stands for Document Type Definition -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-	<session-factory>
-		<!-- Making sure the dialect points to Postgres -->
-		<property name="hibernate-dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-		
-		<!-- This is pointing to the PostgreSQL driver dependency in our pom.xml file -->
-		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-		
-		<!-- setting our JDBC connection credentials -->
-		<!-- Make sure you put this file in .gitignore for your repo -->
-		<property name="hibernate.connection.url">jdbc:postgresql://database-ers.cqif7qrlhv0g.us-east-1.rds.amazonaws.com:5432/ersdb/</property>
-		<property name="hibernate.connection.username">postgres</property>
-		<property name="hibernate.connection.password">ers-2022</property>
-		
-		<!--  Connection Pool properties:
-				The connection pool is a method of speeding up DB calls.
-				Default size of connection pool is 20 connections.
-				Every time Hibernate starts up, 20 connections are established to our DB.
-				This way, when a session is created (aka an operation against our DB), it is
-				much faster than just plain JDBC.
-				
-		-->
-		<property name="hibernate.connection.pool_size">10</property>
-		<!-- the most important property -->
-		<property name="hibernate.hbm2ddl.auto">create</property>
-	</session-factory>
+    <session-factory>
+        <!-- Connection settings -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://database-ers.cqif7qrlhv0g.us-east-1.rds.amazonaws.com:5432/ersdb</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">ers-2022</property>
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <!-- Print executed SQL to stdout -->
+        <property name="show_sql">true</property>
+        <!-- When we start the application, there are automatically 10 connections ready to be used -->
+        <property name="hibernate.connection.pool_size">10</property>
+        <!-- Update database on startup -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!-- NONE, CREATE, UPDATE, VALIDATE (prod) -->
+        <!-- Annotated entity classes -->
+        <mapping class="com.revature.models.UserRole" />
+		<mapping class="com.revature.models.User" />
+		<mapping class="com.revature.models.ReimbursementStatus" />
+		<mapping class="com.revature.models.ReimbursementType" />
+		<mapping class="com.revature.models.Reimbursement" />
+    </session-factory>
 </hibernate-configuration>
 

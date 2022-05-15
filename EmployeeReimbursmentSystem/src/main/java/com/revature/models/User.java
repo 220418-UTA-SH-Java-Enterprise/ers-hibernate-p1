@@ -1,15 +1,12 @@
 package com.revature.models;
 
+import java.util.Objects;
+
 import javax.persistence.*;
 import org.hibernate.annotations.NaturalId;
-import lombok.*;
 
 @Entity
 @Table(name = "ers_users")
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
 public class User {
 	@Id
 	@Column(name="ers_user_id")
@@ -117,6 +114,30 @@ public class User {
 	public void setUserRole(UserRole userRole) {
 		this.userRole = userRole;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, firstName, id, lastName, password, userName, userRole);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName) && id == other.id
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
+				&& Objects.equals(userName, other.userName) && Objects.equals(userRole, other.userRole);
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", email=" + email + ", userRole=" + userRole + "]";
+	}
 	
 }
