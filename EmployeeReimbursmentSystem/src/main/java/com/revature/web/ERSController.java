@@ -125,6 +125,14 @@ public class ERSController extends HttpServlet {
 			log.info("updating user...");
 			RequestHelper.processUserRoleUpdate(req, resp);
 			break;
+		case "updateReimbursementType":
+			log.info("updateing reimbursment type");
+			RequestHelper.processReimbursementTypeUpdate(req, resp);
+			break;
+		case "updateReimbursementStatus":
+			log.info("updateing reimbursment status");
+			RequestHelper.processReimbursementStatusUpdate(req, resp);
+			break;
 		default:
 			log.info("showing error message...");
 			RequestHelper.processError(req, resp);
@@ -149,6 +157,17 @@ public class ERSController extends HttpServlet {
 			log.info("removing user...");
 			RequestHelper.processUserRoleDelete(req, resp);
 			break;
+		
+		case "deleteReimbursementType":
+			log.info("removing reimbursement type...");
+			RequestHelper.processReimbursementTypeDelete(req, resp);
+			break;
+			
+		case "deleteReimbursementStatus":
+			log.info("removing reimbursement status...");
+			RequestHelper.processReimbursementStatusDelete(req, resp);
+			break;
+			
 			
 		default:
 			log.info("showing error message...");

@@ -520,6 +520,81 @@ public class RequestHelper {
 		log.info("leaving request helper now...");
 		
 	}
+	
+	public static void processTypeBySearchParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("inside of RequestHelper -> searching reimbursement type by param");
+		BufferedReader reader = request.getReader();
+		StringBuilder sb = new StringBuilder();
+		
+		log.info("Leaving RequestHelper");
+		String line = reader.readLine();
+		while (line != null) {
+			sb.append(line);
+			line = reader.readLine();
+		}
+		
+		String body = sb.toString();
+		String [] searchParams = body.split("&");
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String pair : searchParams) {
+			values.add(pair.substring(pair.indexOf("=") + 1));
+		}
+		
+		if(body.startsWith("id")) {
+			log.info("in RequestHelper -> get reimbursement type by id");
+			response.setContentType("application/json");
+			
+			int id = Integer.parseInt(values.get(0));
+			ReimbursementType reimbursementType = typeService.findReimbursementTypeById(id);
+			
+			String json = om.writeValueAsString(reimbursementType);
+			
+			PrintWriter out = response.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		}
+	}
+	
+	public static void processStatusBySearchParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		log.info("inside of RequestHelper -> searching reimbursement Status by param");
+		BufferedReader reader = request.getReader();
+		StringBuilder sb = new StringBuilder();
+		
+		log.info("Leaving RequestHelper");
+		String line = reader.readLine();
+		while (line != null) {
+			sb.append(line);
+			line = reader.readLine();
+		}
+		
+		String body = sb.toString();
+		String [] searchParams = body.split("&");
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String pair : searchParams) {
+			values.add(pair.substring(pair.indexOf("=") + 1));
+		}
+		
+		if(body.startsWith("id")) {
+			log.info("in RequestHelper -> get reimbursement status by id");
+			response.setContentType("application/json");
+			
+			int id = Integer.parseInt(values.get(0));
+			ReimbursementStatus reimbursementStatus = statusService.findReimbursementStatusById(id);
+			
+			String json = om.writeValueAsString(reimbursementStatus);
+			
+			PrintWriter out = response.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		}
+	}
+	
 
 	public static void processBySearchReimbursementParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("in RequestHelper -> searching a Reimbursement by param");
@@ -575,4 +650,151 @@ public class RequestHelper {
 		log.info("Leaving RequestHelper");
 		
 	}
+	
+	public static void processReimbursementTypeUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processReimbursementTypeUpdate...");
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("Reimbursement type attempted to update with information:\n " + body);
+		
+		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
+		String type = values.get(1); 
+
+		ReimbursementType reimbursementType = new ReimbursementType(id, type);
+		boolean isUpdated = typeService.editReimbursementType(reimbursementType);
+
+		if (isUpdated) {
+			PrintWriter pw = resp.getWriter();
+			log.info("Edit successful! New reimbursement type info: " + reimbursementType);
+			String json = om.writeValueAsString(reimbursementType);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("Reimbursement type has successfully been edited.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400); // this means that the connection was successful but no reimbursement type was updated!
+		}
+		log.info("leaving request helper now...");
+		
+	}
+	
+	public static void processReimbursementStatusUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper -> processReimbursementStautsUpdate...");
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("Reimbursement status attempted to update with information:\n " + body);
+		// capture the actual status values
+		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
+		String status = values.get(1);
+		
+
+		//int reimbursementStatusId = Integer.parseInt(values.get(2));
+		//UserRole userRole = userRoleService.findUserRoleById(userRoleId);
+
+		ReimbursementStatus tempStatus = new ReimbursementStatus(id, status);
+		boolean isUpdated = statusService.editReimbursementStatus(tempStatus);
+
+		if (isUpdated) {
+			PrintWriter pw = resp.getWriter();
+			log.info("Edit successful! New reimbursement status info: " + tempStatus);
+			String json = om.writeValueAsString(tempStatus);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("Reimbursement status has successfully been edited.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400); // this means that the connection was successful but no user was updated!
+		}
+		log.info("leaving request helper now...");
+	}
+	
+	
+	public static void processReimbursementTypeDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper -> processReimbursementTypeDelete...");
+		
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("Reimbursement type attempted to delete with information:\n " + body);
+		
+		int id = Integer.parseInt(values.get(0));
+		ReimbursementType tempReimbursementType = typeService.findReimbursementTypeById(id);
+
+		if (tempReimbursementType != null) {
+			boolean isDeleted = typeService.deleteReimbursementType(id);
+
+			if (isDeleted) {
+				PrintWriter pw = resp.getWriter();
+				log.info("Delete successful! Removed reimbursement type by id: " + id);
+				String json = om.writeValueAsString(tempReimbursementType);
+				pw.println(json);
+				System.out.println("JSON:\n" + json);
+
+				resp.setContentType("application/json");
+				resp.setStatus(200); // SUCCESSFUL!
+				log.info("Reimbursement type has successfully been deleted.");
+			} else {
+				resp.setContentType("application/json");
+				resp.setStatus(400); // this means that the connection was successful but no user was updated!
+			}
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400);
+			log.info("Delete unsuccessful! Unable to find the reimbursement type with the id: " + id);
+		}
+
+		log.info("leaving request helper now...");
+		
+	}
+	
+	
+	public static void processReimbursementStatusDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper -> processReimbursementStatusDelete....");
+		String body = getStringRequest(req);
+		
+		List<String> values = getSearchParamsList(body);
+		
+		log.info("User attempted to delete with information:\n " + body);
+		// capture the actual username and password values
+		int id = Integer.parseInt(values.get(0));
+		ReimbursementStatus tempStatus = statusService.findReimbursementStatusById(id);
+
+		if (tempStatus != null) {
+			boolean isDeleted = statusService.deleteReimbursementStatus(id);
+
+			if (isDeleted) {
+				PrintWriter pw = resp.getWriter();
+				log.info("Delete successful! Removed reimbursement status by id: " + id);
+				String json = om.writeValueAsString(tempStatus);
+				pw.println(json);
+				System.out.println("JSON:\n" + json);
+
+				resp.setContentType("application/json");
+				resp.setStatus(200); // SUCCESSFUL!
+				log.info("ReimbursementStatus has successfully been deleted.");
+			} else {
+				resp.setContentType("application/json");
+				resp.setStatus(400); // this means that the connection was successful but no reimbursement stauts was updated!
+			}
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400);
+			log.info("Delete unsuccessful! Unable to find the reimbursement status with the id: " + id);
+		}
+
+		log.info("leaving request helper now...");
+	}
+
+	
 }
