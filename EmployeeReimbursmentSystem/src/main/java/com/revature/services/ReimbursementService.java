@@ -12,7 +12,9 @@ public interface ReimbursementService {
 	
 	public List<Reimbursement> findByStatus(int statusId);
 	
-	public List<Reimbursement> findByStatusAndUser(int statusId, int userId);
+	public List<Reimbursement> findByUserStatus(int userId, int statusId);
+	
+	public List<Reimbursement> findByUser(int userId);
 
 	public List<Reimbursement> findAll();
 

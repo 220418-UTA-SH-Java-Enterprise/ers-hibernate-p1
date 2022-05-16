@@ -23,7 +23,7 @@ public class RequestHelper {
 	private static UserRoleService userRoleService = new UserRoleServiceImpl(new UserRoleDAOImpl());
 	private static ReimbursementTypeService typeService = new ReimbursementTypeServiceImpl(new ReimbursementTypeDAOImpl());
 	private static ReimbursementStatusService statusService = new ReimbursementStatusServiceImpl(new ReimbursementStatusDAOImpl());
-	private static ReimbursementService reimbursementService = new ReimbursementServiceImpl(new ReimbursementDAOImpl(), new ReimbursementStatusDAOImpl(), new UserDAOImpl());
+	private static ReimbursementService reimbursementService = new ReimbursementServiceImpl(new ReimbursementDAOImpl());
 	
 	
 	private static Logger log = Logger.getLogger(RequestHelper.class);
@@ -550,7 +550,20 @@ public class RequestHelper {
 			int userId = Integer.parseInt(values.get(0));
 			int statusId = Integer.parseInt(values.get(1));
 
-			List<Reimbursement> reimbursements = reimbursementService.findByStatusAndUser(statusId, userId);
+			List<Reimbursement> reimbursements = reimbursementService.findByUserStatus(userId, statusId);
+
+			String json = om.writeValueAsString(reimbursements);
+
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		} else if (body.startsWith("employeeId")) {
+			log.info("in RequestHelper -> get Reimbursement by status");
+			resp.setContentType("application/json");
+			int userId = Integer.parseInt(values.get(0));
+
+			List<Reimbursement> reimbursements = reimbursementService.findByUser(userId);
 
 			String json = om.writeValueAsString(reimbursements);
 

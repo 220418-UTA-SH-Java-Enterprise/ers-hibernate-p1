@@ -59,6 +59,30 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 
 		return reimbursements;
 	}
+	
+
+
+	@Override
+	public List<Reimbursement> selectByStatus(int statusId) {
+		log.info("searching reimbursements by status: " + statusId);
+
+		Session session = HibernateUtil.getSession();
+		String query = "SELECT * FROM ers_reimbursement WHERE reimb_status_id = " + statusId;
+		List<Reimbursement> reimbursements = session.createNativeQuery(query, Reimbursement.class).getResultList();
+				
+		return reimbursements;
+	}
+
+	@Override
+	public List<Reimbursement> selectByUserStatus(int userId, int statusId) {
+		log.info("searching reimbursements by status: " + statusId);
+
+		Session session = HibernateUtil.getSession();
+		String query = "SELECT * FROM ers_reimbursement WHERE reimb_status_id = " + statusId + " AND reimb_author = " + userId;
+		List<Reimbursement> reimbursements = session.createNativeQuery(query, Reimbursement.class).getResultList();
+				
+		return reimbursements;
+	}
 
 	@Override
 	public boolean update(Reimbursement reimbursement) {
@@ -102,6 +126,17 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 			return false;	
 		}
 		
+	}
+
+	@Override
+	public List<Reimbursement> selectByUser(int userId) {
+		log.info("searching reimbursements by user: " + userId);
+
+		Session session = HibernateUtil.getSession();
+		String query = "SELECT * FROM ers_reimbursement WHERE reimb_author = " + userId;
+		List<Reimbursement> reimbursements = session.createNativeQuery(query, Reimbursement.class).getResultList();
+				
+		return reimbursements;
 	}
 
 }
