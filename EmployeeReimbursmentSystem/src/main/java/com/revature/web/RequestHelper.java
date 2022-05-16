@@ -21,11 +21,12 @@ public class RequestHelper {
 
 	private static UserService userService = new UserServiceImpl(new UserDAOImpl());
 	private static UserRoleService userRoleService = new UserRoleServiceImpl(new UserRoleDAOImpl());
-	private static ReimbursementTypeService typeService = new ReimbursementTypeServiceImpl(new ReimbursementTypeDAOImpl());
-	private static ReimbursementStatusService statusService = new ReimbursementStatusServiceImpl(new ReimbursementStatusDAOImpl());
-	private static ReimbursementService reimbursementService = new ReimbursementServiceImpl(new ReimbursementDAOImpl(), new ReimbursementStatusDAOImpl(), new UserDAOImpl());
-	
-	
+	private static ReimbursementTypeService typeService = new ReimbursementTypeServiceImpl(
+			new ReimbursementTypeDAOImpl());
+	private static ReimbursementStatusService statusService = new ReimbursementStatusServiceImpl(
+			new ReimbursementStatusDAOImpl());
+	private static ReimbursementService reimbursementService = new ReimbursementServiceImpl(new ReimbursementDAOImpl());
+
 	private static Logger log = Logger.getLogger(RequestHelper.class);
 	private static ObjectMapper om = new ObjectMapper();
 
@@ -72,9 +73,9 @@ public class RequestHelper {
 			throws IOException {
 		log.info("inside of request helper...processRegistration...");
 		String body = getStringRequest(request);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to register with information:\n " + body);
 		// capture the actual username and password values
 		String username = values.get(0);
@@ -110,9 +111,9 @@ public class RequestHelper {
 	public static void processUserUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to update with information:\n " + body);
 		// capture the actual username and password values
 		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
@@ -148,9 +149,9 @@ public class RequestHelper {
 	public static void processUserDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to delete with information:\n " + body);
 		// capture the actual username and password values
 		int id = Integer.parseInt(values.get(0));
@@ -196,7 +197,8 @@ public class RequestHelper {
 		log.info("Leaving RequestHelper");
 	}
 
-	public static void processBySearchUserRoleParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public static void processBySearchUserRoleParam(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		log.info("in RequestHelper -> searching a user role by param");
 
 		String body = getStringRequest(req);
@@ -225,9 +227,9 @@ public class RequestHelper {
 			throws IOException {
 		log.info("inside of request helper...processRegistration...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to register with information:\n " + body);
 		// capture the actual username and password values
 		String role = values.get(0);
@@ -257,13 +259,13 @@ public class RequestHelper {
 	public static void processUserRoleUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to update with information:\n " + body);
 		// capture the actual username and password values
 		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
-		String role = values.get(1); 
+		String role = values.get(1);
 
 		UserRole userRole = new UserRole(id, role);
 		boolean isUpdated = userRoleService.editUserRole(userRole);
@@ -283,18 +285,18 @@ public class RequestHelper {
 			resp.setStatus(400); // this means that the connection was successful but no user was updated!
 		}
 		log.info("leaving request helper now...");
-		
+
 	}
 
 	public static void processUserRoleDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserUpdate...");
-		
+
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to delete with information:\n " + body);
-		
+
 		int id = Integer.parseInt(values.get(0));
 		UserRole tempUserRole = userRoleService.findUserRoleById(id);
 
@@ -322,7 +324,7 @@ public class RequestHelper {
 		}
 
 		log.info("leaving request helper now...");
-		
+
 	}
 
 	public static void processError(HttpServletRequest req, HttpServletResponse resp)
@@ -416,9 +418,9 @@ public class RequestHelper {
 	public static void processTypeRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processRegistration...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to register with information:\n " + body);
 
 		String type = values.get(0);
@@ -447,9 +449,9 @@ public class RequestHelper {
 	public static void processStatusRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processRegistration...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to register with information:\n " + body);
 
 		String status = values.get(0);
@@ -478,28 +480,26 @@ public class RequestHelper {
 	public static void processSubmitReimbursement(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processSubmitReimbursement...");
 		String body = getStringRequest(req);
-		
+
 		List<String> values = getSearchParamsList(body);
-		
+
 		log.info("User attempted to submit a new reimbursement with information:\n " + body);
-		
-		Double amount = Double.parseDouble(values.get(0)) ;
+
+		Double amount = Double.parseDouble(values.get(0));
 		LocalDate submittedDate = LocalDate.now();
 		String description = values.get(1);
-		
+
 		int authorId = Integer.parseInt(values.get(2));
 		User author = userService.findUserById(authorId);
-		 
+
 		int typeId = Integer.parseInt(values.get(3));
-		ReimbursementType type =  typeService.findReimbursementTypeById(typeId);
+		ReimbursementType type = typeService.findReimbursementTypeById(typeId);
 		ReimbursementStatus status = statusService.findReimbursementStatusById(1);
-		
-		
-		
+
 		Reimbursement reimbursement = new Reimbursement(amount, submittedDate, description, author, status, type);
-		
+
 		log.info("Reimbursement:\n " + reimbursement);
-		
+
 		int targetId = reimbursementService.submit(reimbursement);
 
 		if (targetId != 0) {
@@ -518,7 +518,7 @@ public class RequestHelper {
 			resp.setStatus(204); // this means that the connection was successful but no user created!
 		}
 		log.info("leaving request helper now...");
-		
+
 	}
 	
 	public static void processTypeBySearchParam(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -596,7 +596,8 @@ public class RequestHelper {
 	}
 	
 
-	public static void processBySearchReimbursementParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public static void processBySearchReimbursementParam(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		log.info("in RequestHelper -> searching a Reimbursement by param");
 
 		String body = getStringRequest(req);
@@ -621,11 +622,24 @@ public class RequestHelper {
 		} else if (body.startsWith("userId")) {
 			log.info("in RequestHelper -> get Reimbursement by status for an employee");
 			resp.setContentType("application/json");
-			
+
 			int userId = Integer.parseInt(values.get(0));
 			int statusId = Integer.parseInt(values.get(1));
 
-			List<Reimbursement> reimbursements = reimbursementService.findByStatusAndUser(statusId, userId);
+			List<Reimbursement> reimbursements = reimbursementService.findByUserStatus(userId, statusId);
+
+			String json = om.writeValueAsString(reimbursements);
+
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+
+			log.info("Leaving RequestHelper");
+		} else if (body.startsWith("employeeId")) {
+			log.info("in RequestHelper -> get Reimbursement by status");
+			resp.setContentType("application/json");
+			int userId = Integer.parseInt(values.get(0));
+
+			List<Reimbursement> reimbursements = reimbursementService.findByUser(userId);
 
 			String json = om.writeValueAsString(reimbursements);
 
@@ -634,7 +648,7 @@ public class RequestHelper {
 
 			log.info("Leaving RequestHelper");
 		}
-		
+
 	}
 
 	public static void processAllReimbursements(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -648,7 +662,85 @@ public class RequestHelper {
 		out.println(json);
 
 		log.info("Leaving RequestHelper");
+
+	}
+
+	public static void processReimbursementUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processUserUpdate...");
+		String body = getStringRequest(req);
+
+		List<String> values = getSearchParamsList(body);
+
+		log.info("User attempted to update with information:\n " + body);
+
+		int id = Integer.parseInt(values.get(0)); // id numbers cannot be modified!
+		int statusId = Integer.parseInt(values.get(1));
+		ReimbursementStatus status = statusService.findReimbursementStatusById(statusId);
 		
+		Reimbursement tempReimbursement = reimbursementService.findById(id);
+		tempReimbursement.setStatus(status);
+		if (statusId == 2)
+		{
+			tempReimbursement.setResolvedDate(LocalDate.now());
+		}
+		
+		boolean isUpdated = reimbursementService.edit(tempReimbursement);
+
+		if (isUpdated) {
+			PrintWriter pw = resp.getWriter();
+			log.info("Edit successful! New Reimbursement info: " + tempReimbursement);
+			String json = om.writeValueAsString(tempReimbursement);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("User has successfully been edited.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400); // this means that the connection was successful but no user was updated!
+		}
+		log.info("leaving request helper now...");
+
+	}
+
+	public static void processReimbursementDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processReimbursementDelete...");
+
+		String body = getStringRequest(req);
+
+		List<String> values = getSearchParamsList(body);
+
+		log.info("User attempted to delete Reimbursement with information:\n " + body);
+
+		int id = Integer.parseInt(values.get(0));
+		Reimbursement tempReimbursement = reimbursementService.findById(id);
+
+		if (tempReimbursement != null) {
+			boolean isDeleted = userRoleService.deleteUserRole(id);
+
+			if (isDeleted) {
+				PrintWriter pw = resp.getWriter();
+				log.info("Delete successful! Removed Reimbursement by id: " + id);
+				String json = om.writeValueAsString(tempReimbursement);
+				pw.println(json);
+				System.out.println("JSON:\n" + json);
+
+				resp.setContentType("application/json");
+				resp.setStatus(200); // SUCCESSFUL!
+				log.info("User role has successfully been deleted.");
+			} else {
+				resp.setContentType("application/json");
+				resp.setStatus(400); // this means that the connection was successful but no user was updated!
+			}
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400);
+			log.info("Delete unsuccessful! Unable to find the Reimbursement with the id: " + id);
+		}
+
+		log.info("leaving request helper now...");
+
 	}
 	
 	public static void processReimbursementTypeUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
