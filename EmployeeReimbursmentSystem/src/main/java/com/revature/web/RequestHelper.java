@@ -379,11 +379,19 @@ public class RequestHelper {
 			String password = values.get(1);
 
 			User user = userService.login(userName, password);
+			if(user == null) {
+				resp.setContentType("application/json");
+				resp.setStatus(401); // this means that the connection was successful but no user created!
+				
+			}else {
+				
+				String json = om.writeValueAsString(user);
+				
+				PrintWriter out = resp.getWriter();
+				out.println(json);
+			}
+				
 
-			String json = om.writeValueAsString(user);
-
-			PrintWriter out = resp.getWriter();
-			out.println(json);
 
 			log.info("Leaving RequestHelper");
 		}
