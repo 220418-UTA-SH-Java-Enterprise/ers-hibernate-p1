@@ -19,14 +19,19 @@
 	<url-pattern>/users</url-pattern>
 	<url-pattern>/user</url-pattern>
 	<url-pattern>/updateUser</url-pattern>
-	<url-pattern>/deleteUser</url-pattern>
-	
+	<url-pattern>/deleteUser</url-pattern>	
 	
 	<url-pattern>/registerType</url-pattern>
+	<url-pattern>/type</url-pattern>
 	<url-pattern>/types</url-pattern>
+	<url-pattern>/deleteType</url-pattern>
+	<url-pattern>/updateType</url-pattern>
 	
 	<url-pattern>/registerStatus</url-pattern>
+	<url-pattern>/status</url-pattern>
 	<url-pattern>/statuses</url-pattern>
+	<url-pattern>/deleteStatus</url-pattern>
+	<url-pattern>/updateStatus</url-pattern>
 	
 	<url-pattern>/submitReimbursement</url-pattern>
 	<url-pattern>/reimbursements</url-pattern>
