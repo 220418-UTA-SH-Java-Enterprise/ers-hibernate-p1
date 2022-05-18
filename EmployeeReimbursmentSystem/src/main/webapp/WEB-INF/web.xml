@@ -5,16 +5,52 @@
 	<servlet-class>com.revature.web.ERSController</servlet-class>
 </servlet>
 <servlet-mapping>
-	<servlet-name>ERSController</servlet-name>
-	
-	<url-pattern>/login</url-pattern>
+		<servlet-name>ERSController</servlet-name>
 
-	<url-pattern>/registerUserRole</url-pattern>
-	<url-pattern>/userRoles</url-pattern>
-	<url-pattern>/userRole</url-pattern>
-	<url-pattern>/updateUserRole</url-pattern>
-	<url-pattern>/deleteUserRole</url-pattern>
+		<url-pattern>/login</url-pattern>
 
+<<<<<<< HEAD
+		<url-pattern>/registerUserRole</url-pattern>
+		<url-pattern>/userRoles</url-pattern>
+		<url-pattern>/userRole</url-pattern>
+		<url-pattern>/updateUserRole</url-pattern>
+		<url-pattern>/deleteUserRole</url-pattern>
+
+
+		<url-pattern>/regursterUser</url-pattern>
+		<url-pattern>/users</url-pattern>
+		<url-pattern>/user</url-pattern>
+		<url-pattern>/updateUser</url-pattern>
+		<url-pattern>/deleteUser</url-pattern>
+
+		<url-pattern>/registerType</url-pattern>
+		<url-pattern>/type</url-pattern>
+		<url-pattern>/types</url-pattern>
+		<url-pattern>/types</url-pattern>
+		<url-pattern>/deleteType</url-pattern>
+		<url-pattern>/updateType</url-pattern>
+
+		<url-pattern>/regitsterStatus</url-pattern>
+		<url-pattern>/status</url-pattern>
+		<url-pattern>/statuses</url-pattern>
+		<url-pattern>/deleteStatus</url-pattern>
+		<url-pattern>/updateStatus</url-pattern>
+
+		<url-pattern>/submitReimbursement</url-pattern>
+		<url-pattern>/reimbursements</url-pattern>
+		<url-pattern>/reimbursement</url-pattern>
+		<url-pattern>/updateReimbursement</url-pattern>
+		<url-pattern>/deleteReimbursement</url-pattern>
+
+		<url-pattern>/error</url-pattern>
+
+	</servlet-mapping>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error</location>
+	</error-page>
+=======
 	<url-pattern>/registerUser</url-pattern>
 	<url-pattern>/users</url-pattern>
 	<url-pattern>/user</url-pattern>
@@ -46,4 +82,5 @@
 	<error-code>404</error-code>
 	<location>/error</location>
 </error-page>
+>>>>>>> f3cc4cb0c59178afca5f7f9fd6e8bfc6c4bb98ce
 </web-app>
